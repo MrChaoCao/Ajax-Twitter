@@ -6,6 +6,7 @@
   <ul>
     <% tweet.mentioned_users.each do |mentioned_user| %>
       <li><%= link_to mentioned_user.username, user_url(mentioned_user) %></li>
+      <li> <button class='follow-toggle'>follow</button>  </li>
     <% end %>
   </ul>
 <% end %>
