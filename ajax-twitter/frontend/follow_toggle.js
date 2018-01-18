@@ -1,8 +1,4 @@
 class FollowToggle {
-  // constructor(user-id, initial-follow-state){
-  //   this.userId = user-id;
-  //   this.followState = initial-follow-state;
-  // }
 
   constructor(el){
     this.$el = $(el);
@@ -10,9 +6,10 @@ class FollowToggle {
     this.followState = this.$el.data('initial-follow-state');
 
     this.render();
+    this.$el.click(this.handleClick.bind(this));
   }
 
-    render(){
+  render(){
     switch(this.followState){
       case 'followed':
         this.$el.prop('disabled', false);
@@ -33,6 +30,31 @@ class FollowToggle {
     }
   }
 
+  handleClick(){
+    event.preventDefault();
+
+    if (this.followState === 'unfollowed') {
+      $.ajax({
+        url: `/users/${this.userId}/follow`,
+        type: 'POST',
+        dataType: 'json',
+        success(){
+          this.followstate = 'followed';
+          this.render();
+        },
+      });
+    } else{
+      $.ajax({
+        url: `/users/${this.userId}/follow`,
+        type: 'DELETE',
+        dataType: 'json',
+        success(){
+          this.followState = 'unfollowed';
+          this.render();
+        },
+      });
+    }
+  }
 }
 
 module.exports = FollowToggle;
